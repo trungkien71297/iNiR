@@ -4,6 +4,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
 import "calendar_layout.js" as CalendarLayout
+import "lunar.js" as LunarUtils
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -112,6 +113,13 @@ Item {
             if (colors.indexOf(c) === -1) colors.push(c)
         }
         return colors
+    }
+
+    // Lunar date label for a calendar cell (small number in bottom-right)
+    function getLunarLabelForDay(day: int, weekRow: int, dayIndex: int): string {
+        const targetDate = _getDateForCell(day, weekRow, dayIndex)
+        if (!targetDate) return ""
+        return LunarUtils.lunarLabel(targetDate)
     }
 
     // Resolve a calendar cell to a real Date object
@@ -320,6 +328,7 @@ Item {
                                 isToday: root.calendarLayout[modelData][index].today
                                 eventCount: root.getEventCountForDay(root.calendarLayout[modelData][index].day, modelData, index)
                                 sourceColors: root.getSourceColorsForDay(root.calendarLayout[modelData][index].day, modelData, index)
+                                lunarText: root.getLunarLabelForDay(root.calendarLayout[modelData][index].day, modelData, index)
                                 onClicked: {
                                     const targetDate = root._getDateForCell(root.calendarLayout[modelData][index].day, modelData, index)
                                     if (targetDate) {
