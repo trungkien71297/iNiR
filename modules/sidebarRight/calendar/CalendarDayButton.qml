@@ -14,6 +14,7 @@ RippleButton {
     property bool bold
     property bool isHeader: false
     property int eventCount: 0
+    property string lunarText: ""
     // Source colors for multi-colored dots (from CalendarSync + local events)
     property var sourceColors: []
 
@@ -131,6 +132,29 @@ RippleButton {
                     : (Appearance.angelEverywhere ? Appearance.angel.colTextSecondary
                         : Appearance.inirEverywhere ? Appearance.inir.colTextSecondary : Appearance.colors.colSubtext)
             }
+        }
+
+        // Lunar date label (bottom-right)
+        StyledText {
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.rightMargin: 2
+            anchors.bottomMargin: 1
+            scale: button.lunarText !== "" && !button.isHeader ? 1 : 0
+            visible: scale > 0
+            Behavior on scale {
+                enabled: Appearance.animationsEnabled
+                NumberAnimation { duration: Appearance.animation.elementMoveFast.duration; easing.type: Appearance.animation.elementMoveFast.type; easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve }
+            }
+            text: button.lunarText
+            font.pixelSize: 7
+            font.weight: Font.Medium
+            font.family: Appearance.font.family.numbers
+            color: button.isToday == 1
+                ? (Appearance.angelEverywhere ? Appearance.angel.colOnPrimary
+                    : Appearance.inirEverywhere ? Appearance.inir.colOnPrimary : Appearance.colors.colOnPrimary)
+                : (Appearance.angelEverywhere ? Appearance.angel.colTextSecondary
+                    : Appearance.inirEverywhere ? Appearance.inir.colTextSecondary : Appearance.colors.colSubtext)
         }
     }
 }
